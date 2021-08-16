@@ -4,11 +4,13 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
 
-class Outer(val inner: Inner) {
-    fun someMethod(value: String): Boolean = TODO()
-}
+class Outer(val inner: Inner)
 
 class Inner(val value: String)
+
+class SomeService {
+    fun someMethod(value: String): Boolean = TODO()
+}
 
 class Foobartest {
 
@@ -16,9 +18,10 @@ class Foobartest {
     fun testOuterInner() {
         val inner = Inner("test")
         val outer = mockk<Outer>()
+        val service = mockk<SomeService>()
 
         every { outer.inner } returns inner
-        every { outer.someMethod(outer.inner.value) } returns true
+        every { service.someMethod(outer.inner.value) } returns true
 
         assertThat(outer.inner.value).isEqualTo("test")
     }
